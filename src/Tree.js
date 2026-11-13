@@ -7,7 +7,7 @@ export class Tree {
   }
 
   _buildTree(arr) {
-    const preparedArr = Array.from(new Set(arr)).sort((a,b) => a - b);
+    const preparedArr = Array.from(new Set(arr)).sort((a, b) => a - b);
 
     this.root = this._sortedArrToTree(preparedArr, 0, preparedArr.length - 1);
   }
@@ -40,5 +40,25 @@ export class Tree {
       `${prefix}${isLeft ? "    " : "│   "}`,
       true,
     );
+  }
+
+  _checkNode(node, value) {
+    if (node?.data === value) {
+      return true;
+    } else if (
+      (node?.data !== value &&
+      node?.right === null &&
+      node?.left === null) || !node
+    ) {
+      return false;
+    }
+
+    const nextNode = node.data > value ? node.left : node.right;
+
+    return this._checkNode(nextNode, value);
+  }
+
+  includes(value) {
+    return this._checkNode(this.root, value);
   }
 }

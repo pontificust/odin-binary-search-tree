@@ -37,4 +37,31 @@ describe("Tree", () => {
       expect(tree.root.right.right).toBeNull();
     });
   });
+
+  describe("includes(value)", () => {
+    test("returns false if the value is not in the tree", () => {
+      const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+      const oneElemTree = new Tree([1]);
+      expect(oneElemTree.includes(2)).toEqual(false);
+      expect(tree.includes(555)).toEqual(false);
+      expect(tree.includes(666)).toEqual(false);
+      expect(tree.includes(777)).toEqual(false);
+      expect(tree.includes(888)).toEqual(false);
+    });
+
+    test("returns true if the value is in the tree", () => {
+      const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+      const oneElemTree = new Tree([1]);
+      expect(tree.includes(1)).toEqual(true);
+      expect(oneElemTree.includes(1)).toEqual(true);
+      expect(tree.includes(6345)).toEqual(true);
+      expect(tree.includes(9)).toEqual(true);
+      expect(tree.includes(324)).toEqual(true);
+    });
+
+    test("returns false if the tree is empty", () => {
+      const tree = new Tree([]);
+      expect(tree.includes(555)).toEqual(false);
+    });
+  });
 });
