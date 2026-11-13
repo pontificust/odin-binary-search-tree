@@ -43,12 +43,14 @@ export class Tree {
   }
 
   _checkNode(node, value) {
-    if (node?.data === value) {
+    if(!node) return false;
+
+    if (node.data === value) {
       return true;
     } else if (
-      (node?.data !== value &&
-      node?.right === null &&
-      node?.left === null) || !node
+      (node.data !== value &&
+      node.right === null &&
+      node.left === null) || !node
     ) {
       return false;
     }
@@ -60,5 +62,36 @@ export class Tree {
 
   includes(value) {
     return this._checkNode(this.root, value);
+  }
+
+  insert(value) {
+
+    let currentNode = this.root;
+
+    if(!this.root) {
+      this.root = new Node(value);
+      return this.root;
+    }
+
+    while(currentNode !== null) {
+      if(currentNode.data === value) {
+        return this.root;
+      } else if(currentNode.data > value && currentNode.left !== null) {
+        currentNode = currentNode.left;
+      } else if(currentNode.data < value && currentNode.right !== null) {
+        currentNode = currentNode.right;
+      } else {
+        break;
+      }
+    }
+
+
+    if(currentNode.data > value) {
+      currentNode.left = new Node(value);
+    } else {
+      currentNode.right = new Node(value);
+    }
+
+    return this.root;
   }
 }

@@ -64,4 +64,26 @@ describe("Tree", () => {
       expect(tree.includes(555)).toEqual(false);
     });
   });
+
+  describe("insert(value)", () => {
+    test("adds the new node in the empty tree", () => {
+      const tree = new Tree([]);
+      const input = [1, 55, -55];
+
+      input.forEach((value) => {
+        tree.insert(value);
+        expect(tree.includes(value)).toEqual(true);
+      });
+    });
+
+    test("returns root of the tree and doesn't add a duplicate", () => {
+      const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+      const input = [1, 5, 6345];
+
+      input.forEach((value) => {
+        expect(tree.insert(value)).toEqual(tree.root);
+        expect(tree.includes(value)).toEqual(true);
+      });
+    });
+  });
 });
