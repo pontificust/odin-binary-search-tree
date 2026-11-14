@@ -1,4 +1,5 @@
-import { Node } from "./Node.js";
+import { TreeNode } from "./TreeNode.js";
+import { LinkedList } from "./LinkedList.js";
 
 export class Tree {
   constructor(arr) {
@@ -16,7 +17,7 @@ export class Tree {
     if (start > end) return null;
 
     const mid = Math.floor((start + end) / 2);
-    const root = new Node(arr[mid]);
+    const root = new TreeNode(arr[mid]);
 
     root.left = this._sortedArrToTree(arr, start, mid - 1);
     root.right = this._sortedArrToTree(arr, mid + 1, end);
@@ -78,7 +79,7 @@ export class Tree {
     let currentNode = this.root;
 
     if (!this.root) {
-      this.root = new Node(value);
+      this.root = new TreeNode(value);
       return this.root;
     }
 
@@ -95,9 +96,9 @@ export class Tree {
     }
 
     if (currentNode.data > value) {
-      currentNode.left = new Node(value);
+      currentNode.left = new TreeNode(value);
     } else {
-      currentNode.right = new Node(value);
+      currentNode.right = new TreeNode(value);
     }
 
     return this.root;
@@ -111,11 +112,11 @@ export class Tree {
       return;
     }
 
-    if(this.root.data === value) {
-      if(!this.root.left && !this.root.right) {
+    if (this.root.data === value) {
+      if (!this.root.left && !this.root.right) {
         this.root = null;
         return;
-      } else if(this.root.right && this.root.left) {
+      } else if (this.root.right && this.root.left) {
         const descendant = this._cutTheSmallestChild(this.root);
         descendant.left = this.root.left;
         descendant.right = this.root.right;
@@ -156,9 +157,49 @@ export class Tree {
       prevNode[dir] = null;
     }
   }
+
+  levelOrderForEachIterative(callback) {
+    if (!callback) throw new Error("A callback is required!");
+
+    if (!this.root) return;
+
+    const queue = new LinkedList();
+
+    let currentNode = this.root;
+    queue.append(currentNode);
+
+    while (currentNode) {
+      callback(currentNode);
+      queue.pop();
+      if (currentNode.left) queue.append(currentNode.left);
+      if (currentNode.right) queue.append(currentNode.right);
+      currentNode = queue.at(0);
+    }
+  }
+
+  _levelOrderNode(queue, currentNode, callback) {
+    callback(currentNode);
+    queue.pop();
+    if (currentNode.left) queue.append(currentNode.left);
+    if (currentNode.right) queue.append(currentNode.right);
+    if(queue.size() === 0) return;
+    this._levelOrderNode(queue, queue.at(0), callback);
+  }
+
+  levelOrderForEachRecursive(callback) {
+    if (!callback) throw new Error("A callback is required!");
+
+    if (!this.root) return;
+
+    const queue = new LinkedList();
+
+    let currentNode = this.root;
+    queue.append(currentNode);
+
+    this._levelOrderNode(queue, currentNode, callback);
+  }
 }
 
-const tree = new Tree([8,4, 3]);
-tree.deleteItem(8)
-tree.deleteItem(4)
+const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+tree.levelOrderForEachRecursive((node) => console.log(node.data));
 tree.printTree(tree.root);

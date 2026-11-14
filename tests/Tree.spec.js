@@ -141,4 +141,66 @@ describe("Tree", () => {
       expect(tree.includes(10)).toEqual(false);
     });
   });
+
+  describe("levelOrderForEachIterative(callback)", () => {
+    test("throws an Error if no callback provided", () => {
+      const tree = new Tree([1, 2, 3]);
+      expect(() => tree.levelOrderForEachIterative()).toThrow("A callback is required!");
+    });
+
+    test("returns undefined if the tree is empty", () => {
+      const tree = new Tree();
+      expect(tree.levelOrderForEachIterative((node) => console.log(node))).toBeUndefined();
+    });
+
+    test("traverses the tree in level order", () => {
+      const inputs = [
+        { tree: [8, 4, 3], expectedRes: [4, 3, 8] },
+        {
+          tree: [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324],
+          expectedRes: [8, 4, 67, 1, 5, 9, 324, 3, 7, 23, 6345],
+        },
+      ];
+
+      inputs.forEach((input) => {
+        const tree = new Tree(input.tree);
+        const result = [];
+        const expectedRes = input.expectedRes;
+
+        tree.levelOrderForEachIterative((node) => result.push(node.data));
+        expectedRes.forEach((value, idx) => expect(value).toEqual(result[idx]));
+      });
+    });
+  });
+
+   describe("levelOrderForEachRecursive(callback)", () => {
+    test("throws an Error if no callback provided", () => {
+      const tree = new Tree([1, 2, 3]);
+      expect(() => tree.levelOrderForEachRecursive()).toThrow("A callback is required!");
+    });
+
+    test("returns undefined if the tree is empty", () => {
+      const tree = new Tree();
+      expect(tree.levelOrderForEachRecursive((node) => console.log(node))).toBeUndefined();
+    });
+
+    test("traverses the tree in level order", () => {
+      const inputs = [
+        { tree: [8, 4, 3], expectedRes: [4, 3, 8] },
+        {
+          tree: [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324],
+          expectedRes: [8, 4, 67, 1, 5, 9, 324, 3, 7, 23, 6345],
+        },
+      ];
+
+      inputs.forEach((input) => {
+        const tree = new Tree(input.tree);
+        const result = [];
+        const expectedRes = input.expectedRes;
+
+        tree.levelOrderForEachRecursive((node) => result.push(node.data));
+        expectedRes.forEach((value, idx) => expect(value).toEqual(result[idx]));
+      });
+    });
+  });
 });
