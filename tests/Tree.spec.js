@@ -86,4 +86,59 @@ describe("Tree", () => {
       });
     });
   });
+
+  describe("deleteItem(value)", () => {
+    test("returns undefined if the tree is empty", () => {
+      const tree = new Tree([]);
+      expect(tree.deleteItem(33)).toBeUndefined();
+    });
+
+    test("if the tree contains only the root element", () => {
+      const tree = new Tree([1]);
+      tree.deleteItem(1);
+      expect(tree.root).toBeNull();
+    });
+
+    test("deletes the node with the provided value", () => {
+      const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+      const input = [1, 5, 6345, 9];
+
+      input.forEach((value) => {
+        tree.deleteItem(value);
+        expect(tree.includes(value)).toEqual(false);
+      });
+    });
+
+    test("provided value equals root which has both right and left nodes", () => {
+      const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+
+      tree.deleteItem(8);
+      expect(tree.includes(8)).toEqual(false);
+    });
+
+    test("provided value equals root which has only a left node", () => {
+      const tree = new Tree([8, 4, 3]);
+
+      tree.deleteItem(8);
+      tree.deleteItem(4);
+      expect(tree.includes(8)).toEqual(false);
+      expect(tree.includes(4)).toEqual(false);
+    });
+
+    test("provided value equals root which has only a right node", () => {
+      const tree = new Tree([8, 10]);
+
+      tree.deleteItem(10);
+      expect(tree.includes(10)).toEqual(false);
+    });
+
+    test("the tree contains the only element", () => {
+      const tree = new Tree([10]);
+
+      tree.deleteItem(4444);
+      expect(tree.includes(10)).toEqual(true);
+      tree.deleteItem(10);
+      expect(tree.includes(10)).toEqual(false);
+    });
+  });
 });
