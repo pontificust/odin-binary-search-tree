@@ -145,12 +145,16 @@ describe("Tree", () => {
   describe("levelOrderForEachIterative(callback)", () => {
     test("throws an Error if no callback provided", () => {
       const tree = new Tree([1, 2, 3]);
-      expect(() => tree.levelOrderForEachIterative()).toThrow("A callback is required!");
+      expect(() => tree.levelOrderForEachIterative()).toThrow(
+        "A callback is required!",
+      );
     });
 
     test("returns undefined if the tree is empty", () => {
       const tree = new Tree();
-      expect(tree.levelOrderForEachIterative((node) => console.log(node))).toBeUndefined();
+      expect(
+        tree.levelOrderForEachIterative((node) => console.log(node)),
+      ).toBeUndefined();
     });
 
     test("traverses the tree in level order", () => {
@@ -173,15 +177,19 @@ describe("Tree", () => {
     });
   });
 
-   describe("levelOrderForEachRecursive(callback)", () => {
+  describe("levelOrderForEachRecursive(callback)", () => {
     test("throws an Error if no callback provided", () => {
       const tree = new Tree([1, 2, 3]);
-      expect(() => tree.levelOrderForEachRecursive()).toThrow("A callback is required!");
+      expect(() => tree.levelOrderForEachRecursive()).toThrow(
+        "A callback is required!",
+      );
     });
 
     test("returns undefined if the tree is empty", () => {
       const tree = new Tree();
-      expect(tree.levelOrderForEachRecursive((node) => console.log(node))).toBeUndefined();
+      expect(
+        tree.levelOrderForEachRecursive((node) => console.log(node)),
+      ).toBeUndefined();
     });
 
     test("traverses the tree in level order", () => {
@@ -199,6 +207,97 @@ describe("Tree", () => {
         const expectedRes = input.expectedRes;
 
         tree.levelOrderForEachRecursive((node) => result.push(node.data));
+        expectedRes.forEach((value, idx) => expect(value).toEqual(result[idx]));
+      });
+    });
+  });
+
+  describe("inOrderForEach(callback)", () => {
+    test("throws an Error if no callback provided", () => {
+      const tree = new Tree([1, 2, 3]);
+      expect(() => tree.inOrderForEach()).toThrow(
+        "A callback is required!",
+      );
+    });
+
+    test("returns undefined if the tree is empty", () => {
+      const tree = new Tree();
+      expect(
+        tree.inOrderForEach((node) => console.log(node)),
+      ).toBeUndefined();
+    });
+
+    test("traverses the tree in order", () => {
+      const inputs = [
+        { tree: [8, 4, 3], expectedRes: [3, 4, 8] },
+        {
+          tree: [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324],
+          expectedRes: [1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345],
+        },
+      ];
+
+      inputs.forEach((input) => {
+        const tree = new Tree(input.tree);
+        const result = [];
+        const expectedRes = input.expectedRes;
+
+        tree.inOrderForEach((node) => result.push(node.data));
+        expectedRes.forEach((value, idx) => expect(value).toEqual(result[idx]));
+      });
+    });
+  });
+
+  describe("preOrderForEach(callback)", () => {
+    test("throws an Error if no callback provided", () => {
+      const tree = new Tree([1, 2, 3]);
+      expect(() => tree.preOrderForEach()).toThrow(
+        "A callback is required!",
+      );
+    });
+
+    test("traverses the tree pre order", () => {
+      const inputs = [
+        { tree: [8, 4, 3], expectedRes: [4, 3, 8] },
+        {
+          tree: [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324],
+          expectedRes: [8, 4, 1, 3, 5, 7, 67, 9, 23, 324, 6345],
+        },
+      ];
+
+      inputs.forEach((input) => {
+        const tree = new Tree(input.tree);
+        const result = [];
+        const expectedRes = input.expectedRes;
+
+        tree.preOrderForEach((node) => result.push(node.data));
+        expectedRes.forEach((value, idx) => expect(value).toEqual(result[idx]));
+      });
+    });
+  });
+
+  describe("postOrderForEach(callback)", () => {
+    test("throws an Error if no callback provided", () => {
+      const tree = new Tree([1, 2, 3]);
+      expect(() => tree.postOrderForEach()).toThrow(
+        "A callback is required!",
+      );
+    });
+
+    test("traverses the tree post order", () => {
+      const inputs = [
+        { tree: [8, 4, 3], expectedRes: [3, 8, 4] },
+        {
+          tree: [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324],
+          expectedRes: [3, 1, 7, 5, 4, 23, 9, 6345, 324, 67, 8],
+        },
+      ];
+
+      inputs.forEach((input) => {
+        const tree = new Tree(input.tree);
+        const result = [];
+        const expectedRes = input.expectedRes;
+
+        tree.postOrderForEach((node) => result.push(node.data));
         expectedRes.forEach((value, idx) => expect(value).toEqual(result[idx]));
       });
     });

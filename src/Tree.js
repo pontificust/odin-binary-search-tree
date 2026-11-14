@@ -182,8 +182,29 @@ export class Tree {
     queue.pop();
     if (currentNode.left) queue.append(currentNode.left);
     if (currentNode.right) queue.append(currentNode.right);
-    if(queue.size() === 0) return;
+    if (queue.size() === 0) return;
     this._levelOrderNode(queue, queue.at(0), callback);
+  }
+
+  _inOrderNode(currentNode, callback) {
+    if (!currentNode) return;
+    this._inOrderNode(currentNode.left, callback);
+    callback(currentNode);
+    this._inOrderNode(currentNode.right, callback);
+  }
+
+  _preOrderNode(currentNode, callback) {
+    if (!currentNode) return;
+    callback(currentNode);
+    this._preOrderNode(currentNode.left, callback);
+    this._preOrderNode(currentNode.right, callback);
+  }
+
+  _postOrderNode(currentNode, callback) {
+    if (!currentNode) return;
+    this._postOrderNode(currentNode.left, callback);
+    this._postOrderNode(currentNode.right, callback);
+    callback(currentNode);
   }
 
   levelOrderForEachRecursive(callback) {
@@ -198,8 +219,38 @@ export class Tree {
 
     this._levelOrderNode(queue, currentNode, callback);
   }
+
+  inOrderForEach(callback) {
+    if (!callback) throw new Error("A callback is required!");
+
+    if (!this.root) return;
+
+    let currentNode = this.root;
+
+    this._inOrderNode(currentNode, callback);
+  }
+
+  preOrderForEach(callback) {
+    if (!callback) throw new Error("A callback is required!");
+
+    if (!this.root) return;
+
+    let currentNode = this.root;
+
+    this._preOrderNode(currentNode, callback);
+  }
+
+  postOrderForEach(callback) {
+    if (!callback) throw new Error("A callback is required!");
+
+    if (!this.root) return;
+
+    let currentNode = this.root;
+
+    this._postOrderNode(currentNode, callback);
+  }
 }
 
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-tree.levelOrderForEachRecursive((node) => console.log(node.data));
+tree.inOrderForEach((node) => console.log(node.data));
 tree.printTree(tree.root);
