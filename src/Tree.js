@@ -4,23 +4,23 @@ import { LinkedList } from "./LinkedList.js";
 export class Tree {
   constructor(arr) {
     this.root = null;
-    this._buildTree(arr);
+    this.#buildTree(arr);
   }
 
-  _buildTree(arr) {
+  #buildTree(arr) {
     const preparedArr = Array.from(new Set(arr)).sort((a, b) => a - b);
 
-    this.root = this._sortedArrToTree(preparedArr, 0, preparedArr.length - 1);
+    this.root = this.#sortedArrToTree(preparedArr, 0, preparedArr.length - 1);
   }
 
-  _sortedArrToTree(arr, start, end) {
+  #sortedArrToTree(arr, start, end) {
     if (start > end) return null;
 
     const mid = Math.floor((start + end) / 2);
     const root = new TreeNode(arr[mid]);
 
-    root.left = this._sortedArrToTree(arr, start, mid - 1);
-    root.right = this._sortedArrToTree(arr, mid + 1, end);
+    root.left = this.#sortedArrToTree(arr, start, mid - 1);
+    root.right = this.#sortedArrToTree(arr, mid + 1, end);
 
     return root;
   }
@@ -35,7 +35,7 @@ export class Tree {
     this.printTree(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 
-  _checkNode(node, value) {
+  #checkNode(node, value) {
     if (!node) return false;
 
     if (node.data === value) {
@@ -49,10 +49,10 @@ export class Tree {
 
     const nextNode = node.data > value ? node.left : node.right;
 
-    return this._checkNode(nextNode, value);
+    return this.#checkNode(nextNode, value);
   }
 
-  _cutTheSmallestChild(node) {
+  #cutTheSmallestChild(node) {
     let currentNode = node.right;
     let previousNode = node;
 
@@ -72,7 +72,7 @@ export class Tree {
   }
 
   includes(value) {
-    return this._checkNode(this.root, value);
+    return this.#checkNode(this.root, value);
   }
 
   insert(value) {
@@ -117,7 +117,7 @@ export class Tree {
         this.root = null;
         return;
       } else if (this.root.right && this.root.left) {
-        const descendant = this._cutTheSmallestChild(this.root);
+        const descendant = this.#cutTheSmallestChild(this.root);
         descendant.left = this.root.left;
         descendant.right = this.root.right;
         this.root = descendant;
@@ -144,7 +144,7 @@ export class Tree {
 
     const dir = prevNode.data > currentNode.data ? "left" : "right";
     if (currentNode.left && currentNode.right) {
-      let descendant = this._cutTheSmallestChild(currentNode);
+      let descendant = this.#cutTheSmallestChild(currentNode);
       prevNode[dir] = descendant;
       descendant.right = currentNode.right;
       descendant.left = currentNode.left;
@@ -177,33 +177,33 @@ export class Tree {
     }
   }
 
-  _levelOrderNode(queue, currentNode, callback) {
+  #levelOrderNode(queue, currentNode, callback) {
     callback(currentNode);
     queue.pop();
     if (currentNode.left) queue.append(currentNode.left);
     if (currentNode.right) queue.append(currentNode.right);
     if (queue.size() === 0) return;
-    this._levelOrderNode(queue, queue.at(0), callback);
+    this.#levelOrderNode(queue, queue.at(0), callback);
   }
 
-  _inOrderNode(currentNode, callback) {
+  #inOrderNode(currentNode, callback) {
     if (!currentNode) return;
-    this._inOrderNode(currentNode.left, callback);
+    this.#inOrderNode(currentNode.left, callback);
     callback(currentNode);
-    this._inOrderNode(currentNode.right, callback);
+    this.#inOrderNode(currentNode.right, callback);
   }
 
-  _preOrderNode(currentNode, callback) {
+  #preOrderNode(currentNode, callback) {
     if (!currentNode) return;
     callback(currentNode);
-    this._preOrderNode(currentNode.left, callback);
-    this._preOrderNode(currentNode.right, callback);
+    this.#preOrderNode(currentNode.left, callback);
+    this.#preOrderNode(currentNode.right, callback);
   }
 
-  _postOrderNode(currentNode, callback) {
+  #postOrderNode(currentNode, callback) {
     if (!currentNode) return;
-    this._postOrderNode(currentNode.left, callback);
-    this._postOrderNode(currentNode.right, callback);
+    this.#postOrderNode(currentNode.left, callback);
+    this.#postOrderNode(currentNode.right, callback);
     callback(currentNode);
   }
 
@@ -217,7 +217,7 @@ export class Tree {
     let currentNode = this.root;
     queue.append(currentNode);
 
-    this._levelOrderNode(queue, currentNode, callback);
+    this.#levelOrderNode(queue, currentNode, callback);
   }
 
   inOrderForEach(callback) {
@@ -227,7 +227,7 @@ export class Tree {
 
     let currentNode = this.root;
 
-    this._inOrderNode(currentNode, callback);
+    this.#inOrderNode(currentNode, callback);
   }
 
   preOrderForEach(callback) {
@@ -237,7 +237,7 @@ export class Tree {
 
     let currentNode = this.root;
 
-    this._preOrderNode(currentNode, callback);
+    this.#preOrderNode(currentNode, callback);
   }
 
   postOrderForEach(callback) {
@@ -247,16 +247,16 @@ export class Tree {
 
     let currentNode = this.root;
 
-    this._postOrderNode(currentNode, callback);
+    this.#postOrderNode(currentNode, callback);
   }
 
-  _nodeHeight(node, height) {
+  #nodeHeight(node, height) {
     if (!node) return height;
     height += 1;
 
     return Math.max(
-      this._nodeHeight(node.left, height),
-      this._nodeHeight(node.right, height),
+      this.#nodeHeight(node.left, height),
+      this.#nodeHeight(node.right, height),
     );
   }
 
@@ -267,7 +267,7 @@ export class Tree {
 
     while (currentNode) {
       if (currentNode.data === value) {
-        return this._nodeHeight(currentNode, -1);
+        return this.#nodeHeight(currentNode, -1);
       }
 
       if (currentNode.data > value) {
@@ -299,22 +299,22 @@ export class Tree {
     }
   }
 
-  _checkBalance(node) {
+  #checkBalance(node) {
     if (!node) return true;
 
     if (
       Math.abs(
-        this._nodeHeight(node.left, 0) - this._nodeHeight(node.right, 0),
+        this.#nodeHeight(node.left, 0) - this.#nodeHeight(node.right, 0),
       ) > 1
     ) {
       return false;
     }
 
-    return this._checkBalance(node.left) && this._checkBalance(node.right);
+    return this.#checkBalance(node.left) && this.#checkBalance(node.right);
   }
 
   isBalanced() {
-    return this._checkBalance(this.root);
+    return this.#checkBalance(this.root);
   }
 
   rebalance() {
@@ -322,6 +322,6 @@ export class Tree {
 
     this.inOrderForEach((node) => inputArr.push(node.data));
 
-    this._buildTree(inputArr);
+    this.#buildTree(inputArr);
   }
 }
