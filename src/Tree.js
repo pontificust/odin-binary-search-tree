@@ -303,7 +303,9 @@ export class Tree {
     if (!node) return true;
 
     if (
-      Math.abs(this._nodeHeight(node.left, 0) - this._nodeHeight(node.right, 0)) > 1
+      Math.abs(
+        this._nodeHeight(node.left, 0) - this._nodeHeight(node.right, 0),
+      ) > 1
     ) {
       return false;
     }
@@ -314,11 +316,12 @@ export class Tree {
   isBalanced() {
     return this._checkBalance(this.root);
   }
-}
 
-const tree = new Tree([1, 2, 3]);
-tree.insert(10);
-tree.insert(20);
-tree.insert(30);
-tree.isBalanced();
-tree.printTree(tree.root);
+  rebalance() {
+    const inputArr = [];
+
+    this.inOrderForEach((node) => inputArr.push(node.data));
+
+    this._buildTree(inputArr);
+  }
+}

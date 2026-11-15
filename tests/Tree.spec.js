@@ -402,4 +402,39 @@ describe("Tree", () => {
       expect(tree.isBalanced()).toBe(false);
     });
   });
+
+  describe("rebalance()", () => {
+    test("rebalance the not balanced tree and save all its values", () => {
+      const tree = new Tree([1, 2, 3, 4, 5, 6, 7]);
+      [101, 102, 103, 104, 105].forEach((num) => tree.insert(num));
+
+      expect(tree.isBalanced()).toBe(false);
+
+      tree.rebalance();
+
+      expect(tree.isBalanced()).toBe(true);
+
+      const result = [];
+      tree.inOrderForEach((node) => result.push(node.data));
+      expect(result).toEqual([1, 2, 3, 4, 5, 6, 7, 101, 102, 103, 104, 105]);
+    });
+
+    test("makes the tree with 'balanced' root node balanced", () => {
+      const tree = new Tree([10]);
+      [5, 15, 3, 20, 1, 25].forEach((num) => tree.insert(num));
+      expect(tree.isBalanced()).toBe(false);
+
+      tree.rebalance();
+      expect(tree.isBalanced()).toBe(true);
+      expect(tree.root.left.data).toBe(3);
+      expect(tree.root.right.data).toBe(20);
+    });
+
+    test("empty or one value tree", () => {
+      const emptyTree = new Tree([]);
+      expect(() => emptyTree.rebalance()).not.toThrow();
+      expect(emptyTree.root).toBeNull();
+      expect(emptyTree.isBalanced()).toBe(true);
+    });
+  });
 });
