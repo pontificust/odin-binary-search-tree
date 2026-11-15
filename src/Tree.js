@@ -251,10 +251,13 @@ export class Tree {
   }
 
   _nodeHeight(node, height) {
-    if(!node) return height;
+    if (!node) return height;
     height += 1;
 
-    return Math.max(this._nodeHeight(node.left, height), this._nodeHeight(node.right, height));
+    return Math.max(
+      this._nodeHeight(node.left, height),
+      this._nodeHeight(node.right, height),
+    );
   }
 
   height(value) {
@@ -263,11 +266,11 @@ export class Tree {
     let currentNode = this.root;
 
     while (currentNode) {
-      if(currentNode.data === value) {
+      if (currentNode.data === value) {
         return this._nodeHeight(currentNode, -1);
       }
 
-      if(currentNode.data > value) {
+      if (currentNode.data > value) {
         currentNode = currentNode.left;
       } else {
         currentNode = currentNode.right;
@@ -295,8 +298,27 @@ export class Tree {
       depth += 1;
     }
   }
+
+  _checkBalance(node) {
+    if (!node) return true;
+
+    if (
+      Math.abs(this._nodeHeight(node.left, 0) - this._nodeHeight(node.right, 0)) > 1
+    ) {
+      return false;
+    }
+
+    return this._checkBalance(node.left) && this._checkBalance(node.right);
+  }
+
+  isBalanced() {
+    return this._checkBalance(this.root);
+  }
 }
 
-const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-console.log(tree.height(8));
+const tree = new Tree([1, 2, 3]);
+tree.insert(10);
+tree.insert(20);
+tree.insert(30);
+tree.isBalanced();
 tree.printTree(tree.root);

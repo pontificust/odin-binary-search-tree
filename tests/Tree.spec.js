@@ -356,4 +356,50 @@ describe("Tree", () => {
       });
     });
   });
+
+  describe("isBalanced()", () => {
+    test("empty tree and one element tree are balanced", () => {
+      const emptyTree = new Tree([]);
+      expect(emptyTree.isBalanced()).toBe(true);
+
+      const singleTree = new Tree([42]);
+      expect(singleTree.isBalanced()).toBe(true);
+    });
+
+    test("if the tree is balanced returns true", () => {
+      const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+      expect(tree.isBalanced()).toBe(true);
+    });
+
+    test("the tree with height difference equals 1 is balanced", () => {
+      const tree = new Tree([10]);
+      tree.insert(5);
+      tree.insert(15);
+      tree.insert(2);
+      expect(tree.isBalanced()).toBe(true);
+    });
+
+    test("if the tree is is not balanced returns false", () => {
+      const tree = new Tree([1, 2, 3]);
+      tree.insert(10);
+      tree.insert(20);
+      tree.insert(30);
+      expect(tree.isBalanced()).toBe(false);
+    });
+
+    test("if the root node is balanced but its subtrees are not returns false", () => {
+      const tree = new Tree([10]);
+      [5, 15, 3, 20, 1, 25].forEach((num) => tree.insert(num));
+
+      expect(tree.isBalanced()).toBe(false);
+    });
+
+    test("if the tree becomes not balanced after node deletion returns false", () => {
+      const tree = new Tree([1, 2, 3, 4, 5, 6, 7]);
+      tree.deleteItem(5);
+      tree.deleteItem(7);
+      tree.deleteItem(6);
+      expect(tree.isBalanced()).toBe(false);
+    });
+  });
 });
