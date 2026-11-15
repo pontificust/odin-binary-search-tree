@@ -3,13 +3,13 @@ import { Node } from "./Node.js";
 export class LinkedList {
   length = 0;
 
-  _insertFirstNode(node) {
+  #insertFirstNode(node) {
     this.firstNode = node;
     this.lastNode = node;
     this.length += 1;
   }
 
-  _insertFewNodes(previousNode, values, pos) {
+  #insertFewNodes(previousNode, values, pos) {
     let j = 0;
     while (j < values.length) {
       if (pos === 0 && j === 0) {
@@ -30,7 +30,7 @@ export class LinkedList {
     }
   }
 
-  _findNode(index) {
+  #findNode(index) {
     let i = 0;
     let currentNode = this.firstNode;
     let previousNode;
@@ -57,13 +57,13 @@ export class LinkedList {
 
   at(index) {
     if (index < 0) return undefined;
-    return this._findNode(index).currentNode?.value;
+    return this.#findNode(index).currentNode?.value;
   }
 
   append(value) {
     const node = new Node(value);
     if (this.length === 0) {
-      this._insertFirstNode(node);
+      this.#insertFirstNode(node);
       return;
     }
     this.lastNode.nextNode = node;
@@ -74,7 +74,7 @@ export class LinkedList {
   prepend(value) {
     const node = new Node(value);
     if (this.length === 0) {
-      this._insertFirstNode(node);
+      this.#insertFirstNode(node);
       return;
     }
     node.nextNode = this.firstNode;
@@ -169,7 +169,7 @@ export class LinkedList {
 
     while (i <= this.length) {
       if (i === index) {
-        this._insertFewNodes(previousNode, values, i);
+        this.#insertFewNodes(previousNode, values, i);
         return;
       } else {
         previousNode = currentNode;
@@ -187,7 +187,7 @@ export class LinkedList {
     if (index === 0) {
       this.firstNode = this.firstNode.nextNode;
     } else {
-      const { previousNode, currentNode } = this._findNode(index);
+      const { previousNode, currentNode } = this.#findNode(index);
       previousNode.nextNode = currentNode.nextNode;
       if (index === this.length - 1) {
         this.lastNode = previousNode;
