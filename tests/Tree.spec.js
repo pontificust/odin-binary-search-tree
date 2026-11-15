@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, jest, test } from "@jest/globals";
 import { Tree } from "../src/Tree.js";
 
 describe("Tree", () => {
@@ -215,16 +215,12 @@ describe("Tree", () => {
   describe("inOrderForEach(callback)", () => {
     test("throws an Error if no callback provided", () => {
       const tree = new Tree([1, 2, 3]);
-      expect(() => tree.inOrderForEach()).toThrow(
-        "A callback is required!",
-      );
+      expect(() => tree.inOrderForEach()).toThrow("A callback is required!");
     });
 
     test("returns undefined if the tree is empty", () => {
       const tree = new Tree();
-      expect(
-        tree.inOrderForEach((node) => console.log(node)),
-      ).toBeUndefined();
+      expect(tree.inOrderForEach((node) => console.log(node))).toBeUndefined();
     });
 
     test("traverses the tree in order", () => {
@@ -250,9 +246,7 @@ describe("Tree", () => {
   describe("preOrderForEach(callback)", () => {
     test("throws an Error if no callback provided", () => {
       const tree = new Tree([1, 2, 3]);
-      expect(() => tree.preOrderForEach()).toThrow(
-        "A callback is required!",
-      );
+      expect(() => tree.preOrderForEach()).toThrow("A callback is required!");
     });
 
     test("traverses the tree pre order", () => {
@@ -278,9 +272,7 @@ describe("Tree", () => {
   describe("postOrderForEach(callback)", () => {
     test("throws an Error if no callback provided", () => {
       const tree = new Tree([1, 2, 3]);
-      expect(() => tree.postOrderForEach()).toThrow(
-        "A callback is required!",
-      );
+      expect(() => tree.postOrderForEach()).toThrow("A callback is required!");
     });
 
     test("traverses the tree post order", () => {
@@ -299,6 +291,68 @@ describe("Tree", () => {
 
         tree.postOrderForEach((node) => result.push(node.data));
         expectedRes.forEach((value, idx) => expect(value).toEqual(result[idx]));
+      });
+    });
+  });
+
+  describe("height(value)", () => {
+    test("if the tree is empty returns undefined", () => {
+      const tree = new Tree();
+      expect(tree.height(44444)).toBeUndefined();
+    });
+
+    test("if the value is not in the tree", () => {
+      const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+      expect(tree.height(44444)).toBeUndefined();
+    });
+
+    test("returns the correct height of the node with the provided value", () => {
+      const inputs = [
+        { tree: [8, 4, 3], expectedRes: [0, 1, 0] },
+        {
+          tree: [8, 4, 67, 1, 5, 9, 324, 3, 7, 23, 6345],
+          expectedRes: [3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0],
+        },
+      ];
+
+      inputs.forEach((input) => {
+        const tree = new Tree(input.tree);
+        const expectedRes = input.expectedRes;
+
+        input.tree.forEach((value, idx) =>
+          expect(tree.height(value)).toEqual(expectedRes[idx]),
+        );
+      });
+    });
+  });
+
+  describe("depth(value)", () => {
+    test("if the tree is empty returns undefined", () => {
+      const tree = new Tree();
+      expect(tree.depth(44444)).toBeUndefined();
+    });
+
+    test("if the value is not in the tree", () => {
+      const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+      expect(tree.depth(44444)).toBeUndefined();
+    });
+
+    test("returns the correct depth of the node with the provided value", () => {
+      const inputs = [
+        { tree: [8, 4, 3], expectedRes: [1, 0, 1] },
+        {
+          tree: [8, 4, 67, 1, 5, 9, 324, 3, 7, 23, 6345],
+          expectedRes: [0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3],
+        },
+      ];
+
+      inputs.forEach((input) => {
+        const tree = new Tree(input.tree);
+        const expectedRes = input.expectedRes;
+
+        input.tree.forEach((value, idx) =>
+          expect(tree.depth(value)).toEqual(expectedRes[idx]),
+        );
       });
     });
   });

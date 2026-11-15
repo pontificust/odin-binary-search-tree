@@ -249,8 +249,54 @@ export class Tree {
 
     this._postOrderNode(currentNode, callback);
   }
+
+  _nodeHeight(node, height) {
+    if(!node) return height;
+    height += 1;
+
+    return Math.max(this._nodeHeight(node.left, height), this._nodeHeight(node.right, height));
+  }
+
+  height(value) {
+    if (!this.root) return;
+
+    let currentNode = this.root;
+
+    while (currentNode) {
+      if(currentNode.data === value) {
+        return this._nodeHeight(currentNode, -1);
+      }
+
+      if(currentNode.data > value) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
+    }
+  }
+
+  depth(value) {
+    if (!this.root) return;
+
+    let depth = 0;
+    let currentNode = this.root;
+
+    while (currentNode) {
+      if (currentNode.data === value) {
+        return depth;
+      }
+
+      if (currentNode.data > value) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
+
+      depth += 1;
+    }
+  }
 }
 
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-tree.inOrderForEach((node) => console.log(node.data));
+console.log(tree.height(8));
 tree.printTree(tree.root);
